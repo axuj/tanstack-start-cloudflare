@@ -11,8 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiDemoNamesRouteImport } from './routes/api.demo-names'
+import { Route as AgentsSplatRouteImport } from './routes/agents.$'
 import { Route as DemoStartServerFuncsRouteImport } from './routes/demo.start.server-funcs'
 import { Route as DemoStartApiRequestRouteImport } from './routes/demo.start.api-request'
+import { Route as DemoStartAgentRouteImport } from './routes/demo.start.agent'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,6 +24,11 @@ const IndexRoute = IndexRouteImport.update({
 const ApiDemoNamesRoute = ApiDemoNamesRouteImport.update({
   id: '/api/demo-names',
   path: '/api/demo-names',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AgentsSplatRoute = AgentsSplatRouteImport.update({
+  id: '/agents/$',
+  path: '/agents/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DemoStartServerFuncsRoute = DemoStartServerFuncsRouteImport.update({
@@ -34,23 +41,34 @@ const DemoStartApiRequestRoute = DemoStartApiRequestRouteImport.update({
   path: '/demo/start/api-request',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DemoStartAgentRoute = DemoStartAgentRouteImport.update({
+  id: '/demo/start/agent',
+  path: '/demo/start/agent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/agents/$': typeof AgentsSplatRoute
   '/api/demo-names': typeof ApiDemoNamesRoute
+  '/demo/start/agent': typeof DemoStartAgentRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/agents/$': typeof AgentsSplatRoute
   '/api/demo-names': typeof ApiDemoNamesRoute
+  '/demo/start/agent': typeof DemoStartAgentRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/agents/$': typeof AgentsSplatRoute
   '/api/demo-names': typeof ApiDemoNamesRoute
+  '/demo/start/agent': typeof DemoStartAgentRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
 }
@@ -58,26 +76,34 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/agents/$'
     | '/api/demo-names'
+    | '/demo/start/agent'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/agents/$'
     | '/api/demo-names'
+    | '/demo/start/agent'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
   id:
     | '__root__'
     | '/'
+    | '/agents/$'
     | '/api/demo-names'
+    | '/demo/start/agent'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AgentsSplatRoute: typeof AgentsSplatRoute
   ApiDemoNamesRoute: typeof ApiDemoNamesRoute
+  DemoStartAgentRoute: typeof DemoStartAgentRoute
   DemoStartApiRequestRoute: typeof DemoStartApiRequestRoute
   DemoStartServerFuncsRoute: typeof DemoStartServerFuncsRoute
 }
@@ -98,6 +124,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiDemoNamesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/agents/$': {
+      id: '/agents/$'
+      path: '/agents/$'
+      fullPath: '/agents/$'
+      preLoaderRoute: typeof AgentsSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/demo/start/server-funcs': {
       id: '/demo/start/server-funcs'
       path: '/demo/start/server-funcs'
@@ -112,12 +145,21 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoStartApiRequestRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/demo/start/agent': {
+      id: '/demo/start/agent'
+      path: '/demo/start/agent'
+      fullPath: '/demo/start/agent'
+      preLoaderRoute: typeof DemoStartAgentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AgentsSplatRoute: AgentsSplatRoute,
   ApiDemoNamesRoute: ApiDemoNamesRoute,
+  DemoStartAgentRoute: DemoStartAgentRoute,
   DemoStartApiRequestRoute: DemoStartApiRequestRoute,
   DemoStartServerFuncsRoute: DemoStartServerFuncsRoute,
 }

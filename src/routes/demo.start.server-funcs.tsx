@@ -1,24 +1,24 @@
-import fs from 'node:fs'
-
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 import { useCallback, useState } from 'react'
+import { getBindings } from '@/utils/bindings'
 
-const filePath = 'todos.json'
-
-async function readTodos() {
-  return JSON.parse(
-    await fs.promises.readFile(filePath, 'utf-8').catch(() =>
-      JSON.stringify(
-        [
-          { id: 1, name: 'Get groceries' },
-          { id: 2, name: 'Buy a new phone' },
-        ],
-        null,
-        2,
-      ),
-    ),
-  )
+const KEY = 'todos'
+type Todo = {
+  id: number
+  name: string
+}
+async function readTodos(): Promise<Todo[]> {
+  const env = getBindings()
+  const todos = await env.CACHE.get(KEY)
+  if (todos) {
+    return JSON.parse(todos)
+  } else {
+    return [
+      { id: 1, name: 'Get groceries' },
+      { id: 2, name: 'Buy a new phone' },
+    ]
+  }
 }
 
 const getTodos = createServerFn({
@@ -30,7 +30,7 @@ const addTodo = createServerFn({ method: 'POST' })
   .handler(async ({ data }) => {
     const todos = await readTodos()
     todos.push({ id: todos.length + 1, name: data })
-    await fs.promises.writeFile(filePath, JSON.stringify(todos, null, 2))
+    await getBindings().CACHE.put(KEY, JSON.stringify(todos))
     return todos
   })
 
@@ -86,6 +86,7 @@ function Home() {
             className='w-full rounded-lg border border-white/20 bg-white/10 px-4 py-3 text-white placeholder-white/60 backdrop-blur-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-400'
           />
           <button
+            type='button'
             disabled={todo.trim().length === 0}
             onClick={submitTodo}
             className='rounded-lg bg-blue-500 px-4 py-3 font-bold text-white transition-colors hover:bg-blue-600 disabled:cursor-not-allowed disabled:bg-blue-500/50'

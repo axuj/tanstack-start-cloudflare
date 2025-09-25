@@ -1,5 +1,9 @@
 onlyBuiltDependencies:
   - '@tailwindcss/oxide'
+  - bufferutil
+  - core-js-pure
   - esbuild
+  - keccak
   - sharp
+  - utf-8-validate
   - workerd
